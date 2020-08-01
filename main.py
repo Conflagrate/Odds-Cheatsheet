@@ -1,52 +1,24 @@
-import os
-import math
+# GREEN : '\033[92m'
+# RED : '\033[91m'
+# END : '\033[0m'
 
-from fractions import Fraction
+# ODDS ON : Easier to win, but less rewards.
+# ODDS AGAINST : Harder to win, but more rewards.
 
-os.system('pip install --upgrade pip')
+# MONEYLINE (+) : Stake x (Odds / 100) = Potential Profit OR Stake x (Odds / 100) + Stake = Potential Return.
+# MONEYLINE (-) : Stake / (Odds / 100) = Potential Profit OR Stake / (Odds / 100) + Stake = Potential Profit.
 
-# fractional odds: sometimes called British odds or traditional odds and are sometimes written as a fraction, such as 6/1, or expressed as a ratio, like six-to-one.
-# decimal odds: represent the amount that is won for every $1 that is wagered. For instance, if the odds are 3.00 that a certain horse wins, the payout is $300 for every $100 wagered.
-# american odds: sometimes called moneyline odds and are accompanied by a plus (+) or minus (-) sign, with the plus sign assigned to the lower probability event with the higher payout.
+import fractions
 
-# fractional to decimal
-def fractionalToDecimal(fractionalOdds):
-  decimalOdds = 1 + fractionalOdds
-  return decimalOdds
+odds = input('\nOdds? > ')
 
-# fractional to american
-def fractionalToAmerican(fractionalOdds):
-  if fractionalOdds >= 1:
-    americanOdds = 100 * fractionalOdds
-  elif fractionalOdds < 1:
-    americanOdds = -100 / fractionalOdds 
-  return americanOdds
+strippedOdds = odds.replace('-', '') if '-' in odds else odds.replace('+', '')
+monetizedOdds = f'${strippedOdds}'
+coloredOdds = '\033[92m' + odds + '\033[0m' if '-' in odds else '\033[91m' + odds + '\033[0m'
 
-# decimal to fractional
-def decimalToFractional(decimalOdds):
-  fractionalOdds = decimalOdds - 1
-  return Fraction(fractionalOdds)
+greenMoreLikely = '\033[92m' + 'more likely' + '\033[0m'
+greenHigherColor = '\033[92m' + 'higher' + '\033[0m'
+redLessLikely = '\033[91m' + 'less likely' + '\033[0m'
+redLowerColor = '\033[91m' + 'lower' + '\033[0m'
 
-# decimal to american
-def decimalToAmerican(decimalOdds):
-  if decimalOdds > 2:
-    americanOdds = 100 * (decimalOdds - 1)
-  elif decimalOdds < 2:
-    americanOdds = -100 / (decimalOdds - 1)
-  return americanOdds
-
-# american to decimal
-def americanToDecimal(americanOdds):
-  if americanOdds > 0:
-    decimalOdds = (americanOdds / 100) + 1
-  elif americanOdds < 0:
-    decimalOdds = (-100 / americanOdds ) + 1
-  return decimalOdds
-
-# american to fractional
-def americanToFractional(americanOdds):
-  if americanOdds > 0:
-    fractionalOdds = americanOdds / 100
-  elif americanOdds < 0:
-    fractionalOdds = -100 / americanOdds
-  return fractionalOdds
+print(f'With a moneyline of {coloredOdds}, you are {greenMoreLikely} to win. However, your profit will be {redLowerColor} due to the {greenHigherColor} likelihood of winning. If a {monetizedOdds} is placed, you will profit $100. This moneyline is equal to fractional odds of ' if '-' in odds else f'With a moneyline of {coloredOdds}, you are {redLessLikely} to win. However, your profit will be {greenHigherColor} due to the {redLowerColor} likelihood of winning. If a $100 is placed, you will profit {monetizedOdds}.')
